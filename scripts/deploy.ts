@@ -1,13 +1,15 @@
-// scripts/deploy.js
-const hre = require("hardhat");
+import { ethers } from "hardhat";
 
 async function main() {
-  const MyNFT = await hre.ethers.getContractFactory("MyNFT");
-  const myNFT = await MyNFT.deploy();
+  const [deployer] = await ethers.getSigners();
 
-  await myNFT.waitForDeployment();
+  console.log(`Deploying MY NFT samrt contract: ${deployer.address}`);
 
-  console.log("MyNFT deployed to:", myNFT.target);
+  
+  const Nft = await ethers.getContractFactory("HappyNFT");
+  const nft = await Nft.deploy(deployer.address);
+  await nft.waitForDeployment();
+  console.log(`Happy NFT deployed at: ${await nft.getAddress()}`);
 }
 
 main().catch((error) => {
